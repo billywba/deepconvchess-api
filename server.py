@@ -1,12 +1,7 @@
 from flask import Flask, request, jsonify
 
-import base64
-import io
-import numpy as np
+from utils import convert_base64_image_to_image, extract_chess_board_from_image
 
-from PIL import Image, ImageOps
-
-from tensorflow import convert_to_tensor
 
 app = Flask(__name__)
 
@@ -17,16 +12,10 @@ def hello():
 @app.route('/image/process', methods=['POST'])
 def process_image():
     base64_image = request.json.get('image')
-    image_data = base64.b64decode(base64_image)
+    
+    image = convert_base64_image_to_image(base64_image)
+    board_image = extract_chess_board_from_image(image)
 
-    image = Image.open(io.BytesIO(image_data))
-    image = ImageOps.exif_transpose(image)
-    image.save("test.jpg")
-
-    image_array = np.array(image)
-    tensor = convert_to_tensor(image_array)
-
-    print(tensor)
 
     return jsonify({'message': 'image processed'})
 
