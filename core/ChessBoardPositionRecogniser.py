@@ -1,3 +1,5 @@
+import chess
+
 import numpy as np
 
 from sklearn.preprocessing import LabelEncoder
@@ -8,8 +10,7 @@ from tensorflow.keras.models import load_model
 
 class ChessBoardPositionRecogniser:
     def __init__(self):
-        self.model = load_model("./models/ResNet152_1684339957.h5")
-
+        self.model = load_model("./models/MobileNetV3Large_1684439918.h5")
         
         PIECE_LABELS = ['_', 'p', 'n', 'b', 'r', 'q', 'k', 'P', 'N', 'B', 'R', 'Q', 'K']
         self.label_encoder = LabelEncoder()
@@ -17,9 +18,13 @@ class ChessBoardPositionRecogniser:
 
     def retrieve_fen_from_image(self, image):
         X = self._retrieve_X_array(image)
+        
         y_pred = self.model.predict(X)
+        y_pred_labelled = self.label_encoder.inverse_transform(np.argmax(y_pred, axis=1))
 
-        print(self.label_encoder.inverse_transform(np.argmax(y_pred, axis=1)))
+        predicted_fen = self._convert_array_to_fen(y_pred_labelled)
+        
+        return predicted_fen
 
     def _retrieve_X_array(self, image):
         X = []
@@ -38,3 +43,13 @@ class ChessBoardPositionRecogniser:
 
         return X
     
+    def _convert_array_to_fen(self, piece_array):
+        board = chess.Board("8/8/8/8/8/8/8/8")
+        
+        for i in range(0, len(piece_array)):
+            if piece_array[i] != '_':
+                piece = chess.Piece.from_symbol(piece_array[i])
+                square = chess.SQUARES[(7 - (i // 8)) * 8 + (i % 8)]
+                board.set_piece_at(square, piece)
+
+        return board.fen()

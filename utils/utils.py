@@ -24,6 +24,6 @@ def extract_chess_board_from_image(image):
 
     # Crop to retrieve the middle square of the image
     extracted_image = image.crop((start_x, start_y, start_x + IMG_WIDTH, start_y + IMG_WIDTH))
-    extracted_image.resize((1280, 1280))
+    extracted_image = extracted_image.resize((1280, 1280))
 
     return extracted_image
