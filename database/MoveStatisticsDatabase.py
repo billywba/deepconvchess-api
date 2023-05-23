@@ -76,16 +76,18 @@ class MoveStatisticsDatabase():
         cursor = self.connection.cursor()
 
         if self.check_fen_already_has_move(fen, move):
+            query = ""
             if winner == "black":
                 query = "UPDATE positions SET black_won = black_won + 1 WHERE fen = %s AND move = %s"
             elif winner == "white":
-                query = "UPDATE positions SET white = white + 1 WHERE fen = %s AND move = %s"
+                query = "UPDATE positions SET white_won = white_won + 1 WHERE fen = %s AND move = %s"
             elif winner == "draw":
                 query = "UPDATE positions SET draw = draw + 1 WHERE fen = %s AND move = %s"
 
             cursor.execute(query, (fen, move, ))
 
         else:
+            query = ""
             if winner == "black":
                 query = "INSERT INTO positions (fen, move, black_won, white_won, draw) VALUES (%s, %s, 1, 0, 0)"
             elif winner == "white":
