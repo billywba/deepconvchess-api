@@ -1,9 +1,13 @@
 from flask import Flask, request, jsonify
 
+from core.ChessBoardPositionRecogniser import ChessBoardPositionRecogniser
+
 from utils.utils import convert_base64_image_to_image, extract_chess_board_from_image
 
 
 app = Flask(__name__)
+
+chess_board_position_recogniser = ChessBoardPositionRecogniser()
 
 @app.route('/')
 def hello():
@@ -16,6 +20,8 @@ def process_image():
     image = convert_base64_image_to_image(base64_image)
     board_image = extract_chess_board_from_image(image)
 
+    predicted_fen = chess_board_position_recogniser.retrieve_fen_from_image(board_image)
+    print(predicted_fen)
 
     return jsonify({'message': 'image processed'})
 
