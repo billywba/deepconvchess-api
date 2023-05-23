@@ -29,3 +29,21 @@ class MoveStatisticsDatabase():
         if self.connection:
             self.connection.close()
             print("Disconnected from MySQL database")
+
+    def get_statistics(self, fen):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM positions")
+
+        move_statistics = []
+
+        results = cursor.fetchall()
+        for row in results:
+            move_statistics.append({
+                "move": row[2],
+                "black_won": row[3],
+                "white_won": row[4],
+                "draw": row[5]
+            })
+
+        cursor.close()
+        return move_statistics
