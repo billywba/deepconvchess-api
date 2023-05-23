@@ -1,17 +1,22 @@
 import mysql.connector
 
-def MoveStatisticsDatabase():
-    def __init__(self, host, username, password, database):
+
+class MoveStatisticsDatabase():
+    def __init__(self, host, port, username, password, database):
         self.host = host
+        self.port = port
         self.username = username
         self.password = password
         self.database = database
         self.connection = None
 
+        self.connect()
+
     def connect(self):
         try:
             self.connection = mysql.connector.connect(
                 host=self.host,
+                port=self.port,
                 user=self.username,
                 password=self.password,
                 database=self.database
