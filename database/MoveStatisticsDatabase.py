@@ -38,9 +38,7 @@ class MoveStatisticsDatabase():
 
         results = cursor.fetchall()
         if len(results) == 0:
-            move_statistics.append({
-                "No statistics available"
-            })
+            move_statistics.append("No statistics available")
 
         else:
             for row in results:
@@ -61,6 +59,7 @@ class MoveStatisticsDatabase():
                 })
 
         cursor.close()
+        
         return move_statistics
     
     def check_fen_already_has_move(self, fen, move):

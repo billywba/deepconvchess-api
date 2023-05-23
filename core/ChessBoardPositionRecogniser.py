@@ -52,4 +52,4 @@ class ChessBoardPositionRecogniser:
                 square = chess.SQUARES[(7 - (i // 8)) * 8 + (i % 8)]
                 board.set_piece_at(square, piece)
 
-        return board.fen()
+        return board.fen().split(" ")[0]
