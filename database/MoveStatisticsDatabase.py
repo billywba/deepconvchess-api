@@ -32,7 +32,7 @@ class MoveStatisticsDatabase():
 
     def get_statistics(self, fen):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM positions")
+        cursor.execute("SELECT * FROM positions WHERE fen = %s", (fen, ))
 
         move_statistics = []
 
