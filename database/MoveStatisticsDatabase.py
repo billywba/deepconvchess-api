@@ -62,9 +62,19 @@ class MoveStatisticsDatabase():
 
         cursor.close()
         return move_statistics
+    
+    def check_fen_already_has_move(self, fen, move):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM positions WHERE fen = %s AND move = %s", (fen, move, ))
+
+        results = cursor.fetchall()
+        cursor.close()
+        
+        return len(results) > 0
 
     def insert_statistic(self, fen, move, winner):
         cursor = self.connection.cursor()
+
         # cursor.execute("UPDATE positions SET black_won = black_won + 1 WHERE fen = %s AND move = %s", (fen, move, ))
         cursor.execute("INSERT INTO positions (fen, move, black_won, white_won, draw) VALUES (%s, %s, 1, 0, 0)", (fen, move, ))
 
