@@ -27,7 +27,6 @@ def process_image():
     print("Predicted FEN: %s" % predicted_fen)
 
     move_statistics = move_stats_db.get_statistics(predicted_fen)
-    print(move_statistics)
 
     return jsonify(move_statistics)
 
